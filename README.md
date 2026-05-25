@@ -1,36 +1,360 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🚀 WhatsApp Gateway with Next.js & Baileys
 
-## Getting Started
+A simple self-hosted WhatsApp Gateway built using **Next.js** and **Baileys**.
 
-First, run the development server:
+This project allows you to connect WhatsApp Web using QR Code and send messages through REST API without using third-party WhatsApp gateway services.
+
+---
+
+# ✨ Features
+
+* 📱 WhatsApp Multi Device Support
+* 🔐 QR Code Authentication
+* 💾 Persistent Login Session
+* 🔄 Auto Reconnect
+* 📡 REST API for Sending Messages
+* ⚡ Built with Next.js App Router
+* 🟦 TypeScript Support
+* 🏠 Lightweight & Self Hosted
+
+---
+
+# 🛠 Tech Stack
+
+* ⚛️ Next.js 16
+* 🟦 TypeScript
+* 💬 Baileys (@whiskeysockets/baileys)
+* 🟢 Node.js
+
+---
+
+# 📋 Requirements
+
+Before running this project, make sure you already have:
+
+* 🟢 Node.js >= 18
+* 📦 npm >= 9
+* 📱 WhatsApp account
+* 🌐 Internet connection
+
+Check installed versions:
+
+```bash
+node -v
+npm -v
+```
+
+---
+
+# 📥 Installation
+
+Clone repository:
+
+```bash
+git clone https://github.com/your-username/whatsapp-app.git
+```
+
+Go to project folder:
+
+```bash
+cd whatsapp-app
+```
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+---
+
+# ▶️ Run Development Server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open browser:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+# 🔗 WhatsApp Login & QR Scan
 
-To learn more about Next.js, take a look at the following resources:
+## 1. Start Application
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Run:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+npm run dev
+```
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 2. Open Browser
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Open:
+
+```bash
+http://localhost:3000
+```
+
+---
+
+## 3. QR Code Appears
+
+QR Code will automatically appear on the page.
+
+---
+
+## 4. Scan QR Using WhatsApp
+
+### Android
+
+* Open WhatsApp
+* Tap ⋮ (three dots)
+* Linked Devices
+* Link a Device
+
+### iPhone
+
+* Open WhatsApp
+* Settings
+* Linked Devices
+* Link a Device
+
+Then scan the QR Code.
+
+---
+
+## 5. Connected
+
+If successful:
+
+```text
+CONNECTED
+```
+
+will appear in terminal logs.
+
+Session data will automatically be saved inside:
+- noted: if you want to clear session, remove/delete auth folder
+```bash
+/auth
+```
+
+So you do not need to scan QR again after restarting the app.
+
+---
+
+# 📡 API Endpoints
+
+## 🔌 Connect WhatsApp
+
+### Endpoint
+
+```http
+GET /api/connect
+```
+
+### Response
+
+```json
+{
+  "qr": "qr-code-data"
+}
+```
+
+---
+
+# ✉️ Send Message
+
+## Endpoint
+
+```http
+POST /api/connect/send
+```
+
+---
+
+## Request Body
+
+```json
+{
+  "number": "6281234567890",
+  "message": "Hello from Baileys"
+}
+```
+
+---
+
+## Example Using CURL
+
+```bash
+curl --location 'http://localhost:3000/api/connect/send' \
+--header 'Content-Type: application/json' \
+--data '{
+  "number": "628216957356",
+  "message": ""
+}'
+```
+
+---
+
+## Example Using JavaScript Fetch
+
+```javascript
+await fetch(
+    "http://localhost:3000/api/connect/send",
+    {
+        method: "POST",
+        headers: {
+            "Content-Type":
+                "application/json"
+        },
+        body: JSON.stringify({
+            number:
+                "6281234567890",
+            message:
+                "Hello World"
+        })
+    }
+);
+```
+
+---
+
+## Success Response
+
+```json
+{
+  "success": true
+}
+```
+
+---
+
+# ☎️ Number Format
+
+Phone number must:
+
+* 🌍 Use country code
+* ❌ Without "+"
+* ❌ Without spaces
+
+Correct:
+
+```text
+6281234567890
+```
+
+Wrong:
+
+```text
+081234567890
++6281234567890
+```
+
+---
+
+# 📁 Project Structure
+
+```bash
+app/
+ ├── api/
+ │    ├── connect/
+ │    │     └── route.ts
+ │    │
+ │    └── send/
+ │          └── route.ts
+ │
+ ├── page.tsx
+ │
+lib/
+ └── whatsapp.ts
+
+auth/
+ └── session files
+```
+
+---
+
+# ⚙️ Environment
+
+No environment variables required for basic usage.
+
+Optional:
+
+```env
+PORT=3000
+```
+
+---
+
+# 🙈 .gitignore
+
+```gitignore
+node_modules/
+.next/
+auth/
+.env
+.DS_Store
+```
+
+---
+
+# 🧰 Useful Commands
+
+Install dependency:
+
+```bash
+npm install
+```
+
+Run development:
+
+```bash
+npm run dev
+```
+
+Build production:
+
+```bash
+npm run build
+```
+
+Run production:
+
+```bash
+npm start
+```
+
+---
+
+# ⚠️ Important Notes
+
+* This project uses unofficial WhatsApp Web protocol
+* Avoid spam or bulk messaging
+* WhatsApp may block accounts abusing automation
+* Recommended for internal tools, automation, and personal projects
+
+---
+
+# 🚧 Future Improvements
+
+* 🖼 Send Images
+* 📄 Send PDF/Documents
+* 🔌 WebSocket Real-time Status
+* 👥 Contact Management
+* 👨‍👩‍👧‍👦 Group Messaging
+* 🐳 Docker Support
+* 🗄 Database Session Storage
+
+---
+
+# 📜 License
+
+MIT License By Jafar
